@@ -59,8 +59,14 @@
             <main class="dashboard-main">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
                 <div>
-                    <h1 class="h5 mb-1 fw-bold">Dashboard</h1>
-                    <p class="text-muted mb-0">Overview of your store performance for the last 7 days.</p>
+                    <h1 class="h5 mb-1 fw-bold">Dashboard
+                        <span class="dashboard-tooltip ms-2">
+                            <i class="bi bi-question-circle-fill text-secondary" aria-hidden="true"></i>
+                            <span class="dashboard-tooltip-text" role="tooltip">
+                                View a quick snapshot of your business performance—track sales, top-selling products, website visitor trends, and key reports all in one place.
+                            </span>
+                        </span>
+                    </h1>
                 </div>
                 <div class="d-flex gap-2">
                     <button type="button" class="btn btn-outline-secondary btn-sm">Last 7 Days</button>
