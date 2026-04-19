@@ -159,33 +159,66 @@
             <div class="modal-body p-4">
                 <form id="addProductForm">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Product Name</label>
+                        <label class="form-label small fw-bold">Product Name*</label>
                         <input type="text" class="form-control bg-light border-0" placeholder="Enter product name" required>
                     </div>
                     
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label small fw-bold">Category</label>
+                            <label class="form-label small fw-bold">Category*</label>
                             <select class="form-select bg-light border-0">
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label small fw-bold">Price (PHP)</label>
+                            <label class="form-label small fw-bold">Price (PHP)*</label>
+                             <span class="dashboard-tooltip ms-2">
+                                <i class="bi bi-question-circle-fill text-secondary" aria-hidden="true"></i>
+                            <span class="dashboard-tooltip-text" role="tooltip">
+                                The price that consumer will pay.</span>
+                        </span>
                             <input type="number" step="0.01" class="form-control bg-light border-0" placeholder="0.00" required>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Short Description</label>
-                        <input type="text" class="form-control bg-light border-0" >
+                        <label class="form-label small fw-bold">Short Description*</label>
+                         <span class="dashboard-tooltip ms-2">
+                            <i class="bi bi-question-circle-fill text-secondary" aria-hidden="true"></i>
+                            <span class="dashboard-tooltip-text" role="tooltip">
+                                A 1-sentence summary (max 60 chars) shown on the shop gallery and search results.</span>
+                        </span>
+                        <input type="text" class="form-control bg-light border-0" required>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Long Description</label>
+                        <label class="form-label small fw-bold">Long Description*</label>
+                         <span class="dashboard-tooltip ms-2">
+                            <i class="bi bi-question-circle-fill text-secondary" aria-hidden="true"></i>
+                            <span class="dashboard-tooltip-text" role="tooltip">
+                                Detailed information including ingredients, allergens, and brewing or preparation notes.</span>
+                        </span>
                             <div id="editor-container" style="height: 200px; border-radius: 0 0 8px 8px;"></div>
                         <input type="hidden" name="long_description" id="long_description">
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Featured Image*</label>
+                        <span class="dashboard-tooltip ms-2">
+                            <i class="bi bi-question-circle-fill text-secondary" aria-hidden="true"></i>
+                            <span class="dashboard-tooltip-text" role="tooltip">
+                                Upload a high-quality photo. This will be the main image customers see on the menu.</span>
+                        </span>
+                        <div class="d-flex align-items-center gap-3">
+                            <!-- Preview Box -->
+                            <div id="image-preview" class="rounded bg-light d-flex align-items-center justify-content-center border" style="width: 80px; height: 80px; overflow: hidden;">
+                                <i class="bi bi-image text-muted fs-3"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <input type="file" class="form-control form-control-sm" id="productImage" accept="image/*" required>
+                                <small class="text-muted">Recommended: Square image (500x500px)</small>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="mb-0 text-end pt-3">
                         <button type="button" class="btn btn-light px-4 me-2" data-bs-dismiss="modal">Cancel</button>
@@ -200,6 +233,7 @@
 
     <script src="../src/assets/javascript/admin/left-side-bar.js"></script>
     <script src="../src/assets/javascript/admin/rich-text-editor.js"></script>
+    <script src="../src/assets/javascript/admin/inventory.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-8DBwxvghb+f8w824cDtgFXtW+eLk+ifaFVIJ9ai0SyxgbpPzJblwXERQ8GHKq2ya" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
