@@ -128,9 +128,9 @@
                         <tbody>
                             <!-- Example Row 1 -->
                             <tr>
-                                <td>#001</td>
+                                <td>1</td>
                                 <td>Java Chip Frappuccino</td>
-                                <td>Beverages</td>
+                                <td>Frappe</td>
                                 <td>$4.50</td>
                                 <td><span class="badge bg-success-subtle text-success">Published</span></td>
                                 <td>2024-06-01</td>
