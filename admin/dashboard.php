@@ -44,10 +44,12 @@
                     <!-- Submenu Links -->
                     <div class="collapse" id="productsSubmenu">
                         <div class="list-group list-group-flush ps-4">
-                            <a href="inventory.php" class="list-group-item list-group-item-action border-0 py-2 small">
+                           <a href="inventory.php" class="list-group-item list-group-item-action border-0 py-2 small">
+                                <i class="bi bi-archive"></i>
                                 Inventory
                             </a>
                             <a href="categories.php" class="list-group-item list-group-item-action border-0 py-2 small">
+                                <i class="bi bi-tags"></i>
                                 Categories
                             </a>
                         </div>
