@@ -28,22 +28,6 @@
 - Git & Github *(Version Control)*
 ---
 
-## 📁 Project Structure
-
-```
-daily-spot-cafe/
-│── index.html
-│── css/
-│   └── style.css
-│── js/
-│   └── left-side-bar.js
-│── assets/
-│   ├── images/
-│   └── icons/
-```
-
----
-
 ## ⚙️ Installation
 
 ```bash
@@ -53,80 +37,29 @@ cd daily-spot-cafe
 
 ---
 
-## ▶️ Usage
+## ▶️ How to Open the Project
 
-Open in browser:
+1. Open XAMPP:
+   - Click Start on Apache
 
-```
-index.html
-```
-
-Or use Live Server for development.
-
----
-
-## 🧠 Key Functionality
-
-### Sidebar Toggle
-- Expands and collapses navigation menu
-- Uses JavaScript DOM manipulation
-- Dynamically updates UI state
-
----
-
-## 📸 Screenshots
-
-_Add screenshots here_
+2. Open in browser:
 
 ```
-/assets/images/demo.png
+localhost/daily-spot-cafe
 ```
-
----
-
-## 🗺 Roadmap
-
-- [ ] Add backend integration
-- [ ] Product filtering
-- [ ] Cart system
-- [ ] Admin dashboard
-- [ ] API integration
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository  
-2. Create a branch  
-   ```bash
-   git checkout -b feature/feature-name
-   ```
-3. Commit changes  
-   ```bash
-   git commit -m "Add feature"
-   ```
-4. Push  
-   ```bash
-   git push origin feature/feature-name
-   ```
-5. Open Pull Request  
-
----
-
-## 📄 License
-
-MIT License
-
----
-
-## 📬 Contact
-
-**Mico Nakase**  
-- GitHub: https://github.com/CodeMico  
 
 ---
 
 ## 🚀 Notes
 
-This project focuses on frontend development and UI interaction.  
-Future improvements may include backend integration and full-stack features.
+Study this project carefully and make sure you understand the basics of the tech stack used.
+
+### 🗺️ To-Do
+
+1. Study basic HTML tags and structure  
+2. Study basic CSS styling and layout principles  
+3. Study basic JavaScript functions
+4. Study CRUD operations *(Create, Read, Update, Delete)*  
+5. Study basic database queries *(e.g., INSERT INTO, SELECT, UPDATE, DELETE)*
+
+   
