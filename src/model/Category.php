@@ -1,10 +1,10 @@
 <?php
-require_once '../config/database.php';
+require_once '../src/config/database.php';
 
 class Category
 {
     private $conn;
-    private $table_name = "category_id";
+    private $table_name = "categories";
 
     public $category_id;
     public $category_name;

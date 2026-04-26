@@ -71,7 +71,19 @@ class ProductController
         $this->product->category_id = $data['category_id'];
         $this->product->is_published = isset($data['is_published']) ? (int)$data['is_published'] : 1;
         $this->product->is_available = isset($data['is_available']) ? (int)$data['is_available'] : 1;
-        $this->product->img_url = $data['img_url'] ?? '';
+
+         $img_url = '';
+        if (isset($_FILES['featured_image']) && $_FILES['featured_image']['error'] == 0) {
+            $uploadResult = $this->uploadImage($_FILES['featured_image']);
+            
+            if ($uploadResult['success']) {
+                $img_url = $uploadResult['path'];
+            } else {
+                return array('success' => false, 'message' => $uploadResult['message']);
+            }
+        }
+
+        $this->product->img_url = $img_url;
 
         if ($this->product->create()) {
             return array(
@@ -82,6 +94,37 @@ class ProductController
         }
 
         return array('success' => false, 'message' => 'Failed to create product');
+    }
+
+    private function uploadImage($file)
+    {
+        $allowed = array('jpg', 'jpeg', 'png', 'gif');
+        $filename = $file['name'];
+        $file_ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        
+        if (!in_array($file_ext, $allowed)) {
+            return array('success' => false, 'message' => 'Only JPG, PNG, and GIF images allowed');
+        }
+        
+        if ($file['size'] > 5 * 1024 * 1024) {
+            return array('success' => false, 'message' => 'Image too large. Max 5MB');
+        }
+        
+        $new_filename = uniqid('product_', true) . '.' . $file_ext;
+        $upload_dir = '../public/uploads/products/';
+        
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+        
+        $upload_path = $upload_dir . $new_filename;
+    
+        if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+            // Return relative path for database
+            return array('success' => true, 'path' => 'uploads/products/' . $new_filename);
+        }
+        
+        return array('success' => false, 'message' => 'Failed to upload image');
     }
 
     public function update($id, $data)

@@ -1,3 +1,10 @@
+<?php
+require_once '../src/controller/CategoryController.php';
+
+$categoryController = new CategoryController();
+$categories = $categoryController->index();
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -169,7 +176,13 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small fw-bold">Category*</label>
-                            <select class="form-select bg-light border-0">
+                            <select class="form-select bg-light border-0" name="category_id" required>
+                                <option value="">Select Category</option>
+                                <?php foreach($categories as $category): ?>
+                                    <option value="<?= $category['category_id'] ?>">
+                                        <?= htmlspecialchars($category['category_name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
