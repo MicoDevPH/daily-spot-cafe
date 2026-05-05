@@ -5,6 +5,69 @@
     min-height: 100vh;
     padding: 1.5rem;
     border-right: 1px solid #e9ecef;
+    transition: flex 0.2s ease, max-width 0.2s ease, min-width 0.2s ease, opacity 0.2s ease;
+    overflow: hidden;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar {
+    flex: 0 0 80px;
+    max-width: 80px;
+    min-width: 80px;
+    opacity: 1;
+    padding: 1.5rem 0.75rem;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-brand .h4,
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-brand small {
+    display: none;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-brand::before {
+    content: 'DS';
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eef3ff;
+    color: #0d6efd;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .menu-card {
+    background: transparent;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav {
+    gap: 0.75rem;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .list-group-item {
+    justify-content: center;
+    padding: 0.85rem;
+    font-size: 0;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .list-group-item .nav-icon {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .list-group-item .bi-chevron-right,
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .list-group-item .bi-chevron-down {
+    display: none;
+}
+
+.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .collapse {
+    display: none !important;
 }
 
 .sidebar-brand .h4 {

@@ -24,7 +24,7 @@
                         Dashboard
                     </a>
                     <a href="orders.php" class="list-group-item list-group-item-action">
-                        <i class="nav-icon bi bi-box-seam"></i>
+                        <i class="nav-icon bi bi-box-seam-fill"></i>
                         Orders
                     </a>
                     <div id="products-toggle" class="list-group-item list-group-item-action" 
