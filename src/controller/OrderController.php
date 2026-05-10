@@ -1,7 +1,7 @@
 <?php
-require_once '../model/Order.php';
-require_once '../model/OrderItem.php';
-require_once '../model/Product.php';
+require_once __DIR__ . '/../model/Order.php';
+require_once __DIR__ . '/../model/OrderItem.php';
+require_once __DIR__ . '/../model/Product.php';
 
 class OrderController
 {
@@ -11,9 +11,9 @@ class OrderController
 
     public function __construct()
     {
-        $this->order = new Order();
+        $this->order     = new Order();
         $this->orderItem = new OrderItem();
-        $this->product = new Product();
+        $this->product   = new Product();
     }
 
     public function index()
@@ -37,11 +37,15 @@ class OrderController
             $orderItems = $this->getOrderItems($id);
 
             return array(
-                'order_id' => $this->order->order_id,
-                'total_amount' => $this->order->total_amount,
-                'order_status' => $this->order->order_status,
-                'created_at' => $this->order->created_at,
-                'items' => $orderItems
+                'order_id'       => $this->order->order_id,
+                'user_id'        => $this->order->user_id,
+                'payment_status' => $this->order->payment_status,
+                'payment_type'   => $this->order->payment_type,
+                'total_amount'   => $this->order->total_amount,
+                'order_status'   => $this->order->order_status,
+                'notes'          => $this->order->notes,
+                'created_at'     => $this->order->created_at,
+                'items'          => $orderItems
             );
         }
 
@@ -55,7 +59,7 @@ class OrderController
         }
 
         $totalAmount = 0;
-        $orderItems = array();
+        $orderItems  = array();
 
         // Validate and calculate total
         foreach ($data['items'] as $item) {
@@ -74,42 +78,45 @@ class OrderController
                 return array('success' => false, 'message' => 'Product not available: ' . $this->product->product_name);
             }
 
-            $quantity = (int)$item['quantity'];
-            $unitPrice = (float)$this->product->price;
+            $quantity     = (int)$item['quantity'];
+            $unitPrice    = (float)$this->product->price;
             $totalAmount += $quantity * $unitPrice;
 
             $orderItems[] = array(
-                'product_id' => $item['product_id'],
-                'quantity' => $quantity,
-                'unit_price' => $unitPrice
+                'product_id'   => $item['product_id'],
+                'product_name' => $this->product->product_name,
+                'quantity'     => $quantity,
+                'unit_price'   => $unitPrice
             );
         }
 
         // Create order
-        $this->order->total_amount = $totalAmount;
-        $this->order->order_status = $data['order_status'] ?? 'Pending';
+        $this->order->user_id        = $data['user_id']        ?? null;
+        $this->order->payment_status = $data['payment_status'] ?? 'Pending';
+        $this->order->payment_type   = $data['payment_type']   ?? 'COD';
+        $this->order->total_amount   = $totalAmount;
+        $this->order->order_status   = $data['order_status']   ?? 'Pending';
+        $this->order->notes          = $data['notes']          ?? '';
 
         if ($this->order->create()) {
             $orderId = $this->order->order_id;
 
             // Create order items
             foreach ($orderItems as $item) {
-                $this->orderItem->order_id = $orderId;
-                $this->orderItem->product_id = $item['product_id'];
-                $this->orderItem->quantity = $item['quantity'];
-                $this->orderItem->unit_price = $item['unit_price'];
+                $this->orderItem->order_id    = $orderId;
+                $this->orderItem->product_id  = $item['product_id'];
+                $this->orderItem->quantity    = $item['quantity'];
+                $this->orderItem->unit_price  = $item['unit_price'];
 
                 if (!$this->orderItem->create()) {
-                    // If order item creation fails, we should ideally rollback the order
-                    // For now, just log the error
                     error_log("Failed to create order item for order $orderId");
                 }
             }
 
             return array(
-                'success' => true,
-                'message' => 'Order created successfully',
-                'order_id' => $orderId,
+                'success'      => true,
+                'message'      => 'Order created successfully',
+                'order_id'     => $orderId,
                 'total_amount' => $totalAmount
             );
         }
@@ -126,8 +133,11 @@ class OrderController
             return array('success' => false, 'message' => 'Order not found');
         }
 
-        $this->order->total_amount = $data['total_amount'] ?? $this->order->total_amount;
-        $this->order->order_status = $data['order_status'] ?? $this->order->order_status;
+        $this->order->payment_status = $data['payment_status'] ?? $this->order->payment_status;
+        $this->order->payment_type   = $data['payment_type']   ?? $this->order->payment_type;
+        $this->order->total_amount   = $data['total_amount']   ?? $this->order->total_amount;
+        $this->order->order_status   = $data['order_status']   ?? $this->order->order_status;
+        $this->order->notes          = $data['notes']          ?? $this->order->notes;
 
         if ($this->order->update()) {
             return array('success' => true, 'message' => 'Order updated successfully');
@@ -190,20 +200,20 @@ class OrderController
     private function getOrderItems($orderId)
     {
         $result = $this->orderItem->readByOrderId($orderId);
-        $items = array();
+        $items  = array();
 
         while ($row = $result->fetch_assoc()) {
-            // Get product details
+            // Get product details for current name/price reference
             $this->product->product_id = $row['product_id'];
             $this->product->readOne();
 
             $items[] = array(
                 'order_item_id' => $row['order_item_id'],
-                'product_id' => $row['product_id'],
-                'product_name' => $this->product->product_name,
-                'quantity' => $row['quantity'],
-                'unit_price' => $row['unit_price'],
-                'subtotal' => $row['quantity'] * $row['unit_price']
+                'product_id'    => $row['product_id'],
+                'product_name'  => $this->product->product_name,
+                'quantity'      => $row['quantity'],
+                'unit_price'    => $row['unit_price'],
+                'subtotal'      => $row['quantity'] * $row['unit_price']
             );
         }
 

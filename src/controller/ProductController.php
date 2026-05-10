@@ -1,16 +1,19 @@
 <?php
-require_once '../model/Product.php';
-require_once '../model/Category.php';
+require_once __DIR__ . '/../model/Product.php';
+require_once __DIR__ . '/../model/Category.php';
+require_once __DIR__ . '/../controller/ProductVariantController.php';
 
 class ProductController
 {
     private $product;
     private $category;
+    private $variantController;
 
     public function __construct()
     {
-        $this->product = new Product();
-        $this->category = new Category();
+        $this->product           = new Product();
+        $this->category          = new Category();
+        $this->variantController = new ProductVariantController();
     }
 
     public function index()
@@ -86,10 +89,17 @@ class ProductController
         $this->product->img_url = $img_url;
 
         if ($this->product->create()) {
+            $productId = $this->product->product_id;
+
+            // Save variants if provided
+            if (!empty($data['variants']) && is_array($data['variants'])) {
+                $this->variantController->saveVariants($productId, $data['variants']);
+            }
+
             return array(
-                'success' => true,
-                'message' => 'Product created successfully',
-                'product_id' => $this->product->product_id
+                'success'    => true,
+                'message'    => 'Product created successfully',
+                'product_id' => $productId
             );
         }
 
@@ -155,6 +165,10 @@ class ProductController
         $this->product->img_url = $data['img_url'] ?? $this->product->img_url;
 
         if ($this->product->update()) {
+            // Re-save variants if provided
+            if (isset($data['variants']) && is_array($data['variants'])) {
+                $this->variantController->saveVariants($id, $data['variants']);
+            }
             return array('success' => true, 'message' => 'Product updated successfully');
         }
 
@@ -270,18 +284,24 @@ class ProductController
         $this->category->category_id = $row['category_id'];
         $this->category->readOne();
 
+        // Get variants
+        $variants = $this->variantController->getVariantsForProduct($row['product_id']);
+
         return array(
-            'product_id' => $row['product_id'],
-            'product_name' => $row['product_name'],
-            'price' => $row['price'],
-            'short_description' => $row['short_description'],
+            'product_id'       => $row['product_id'],
+            'product_name'     => $row['product_name'],
+            'price'            => $row['price'],
+            'short_description'=> $row['short_description'],
             'long_description' => $row['long_description'],
-            'category_id' => $row['category_id'],
-            'category_name' => $this->category->category_name,
-            'is_published' => $row['is_published'],
-            'is_available' => $row['is_available'],
-            'img_url' => $row['img_url'],
-            'created_at' => $row['created_at']
+            'category_id'      => $row['category_id'],
+            'category_name'    => $this->category->category_name,
+            'has_variants'     => (int) ($this->category->has_variants ?? 0),
+            'has_sizes'        => (int) ($this->category->has_sizes    ?? 0),
+            'is_published'     => $row['is_published'],
+            'is_available'     => $row['is_available'],
+            'img_url'          => $row['img_url'],
+            'created_at'       => $row['created_at'],
+            'variants'         => $variants
         );
     }
 }

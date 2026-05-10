@@ -1,16 +1,10 @@
 <?php require_once 'auth/auth_check.php'; ?>
-<?php
-require_once '../src/controller/OrderController.php';
-
-$orderController = new OrderController();
-$orders = $orderController->index();
-?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Orders Dashboard</title>
+    <title>My Account | Daily Spot Cafe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="../src/assets/css/admin/admin-dashboard.css" rel="stylesheet">
@@ -31,7 +25,7 @@ $orders = $orderController->index();
                         <i class="nav-icon bi bi-house-door-fill"></i>
                         <span class="nav-label">Dashboard</span>
                     </a>
-                    <a href="orders.php" class="list-group-item list-group-item-action active">
+                    <a href="orders.php" class="list-group-item list-group-item-action">
                         <i class="nav-icon bi bi-box-seam-fill"></i>
                         <span class="nav-label">Orders</span>
                     </a>
@@ -51,7 +45,7 @@ $orders = $orderController->index();
 
                     <div class="collapse" id="productsSubmenu">
                         <div class="list-group list-group-flush ps-4">
-                            <a href="inventory.php" class="list-group-item list-group-item-action border-0 py-2 small">
+                           <a href="inventory.php" class="list-group-item list-group-item-action border-0 py-2 small">
                                 <i class="bi bi-archive"></i>
                                 Inventory
                             </a>
@@ -143,7 +137,7 @@ $orders = $orderController->index();
                                     <span class="profile-info-name"><?php echo htmlspecialchars($_SESSION['full_name']); ?></span>
                                     <span class="profile-info-email"><?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?></span>
                                 </div>
-                                <a href="account.php" class="profile-dropdown-item">
+                                <a href="account.php" class="profile-dropdown-item active">
                                     <i class="bi bi-person"></i>
                                     My Account
                                 </a>
@@ -159,96 +153,116 @@ $orders = $orderController->index();
             </nav>
 
             <main class="dashboard-main">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
-                <div>
-                    <h1 class="h5 mb-1 fw-bold">Orders
-                        <span class="dashboard-tooltip ms-2">
-                            <i class="bi bi-question-circle-fill text-secondary" aria-hidden="true"></i>
-                            <span class="dashboard-tooltip-text" role="tooltip">
-                                View, edit, and track your cafe's orders. Manage customer requests and ensure timely fulfillment.</span>
-                        </span>
-                    </h1>
-                </div>
-            </div>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="account-profile-card">
+                            <div class="account-header-bg"></div>
+                            <div class="account-profile-info">
+                                <div class="account-avatar-wrapper">
+                                    <div class="account-avatar-lg"><?php 
+                                        $names = explode(' ', trim($_SESSION['full_name'] ?? ''));
+                                        $initials = !empty($names[0]) ? strtoupper(substr($names[0], 0, 1)) : '';
+                                        if (count($names) > 1) {
+                                            $initials .= strtoupper(substr(end($names), 0, 1));
+                                        }
+                                        echo htmlspecialchars($initials);
+                                    ?></div>
+                                    <button class="account-avatar-edit">
+                                        <i class="bi bi-camera-fill"></i>
+                                    </button>
+                                </div>
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                                    <div>
+                                        <h2 class="account-name"><?php echo htmlspecialchars($_SESSION['full_name']); ?></h2>
+                                        <span class="account-role-badge">Administrator</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-update">
+                                        <i class="bi bi-check2-circle me-2"></i>Save Changes
+                                    </button>
+                                </div>
 
-            <div class="dashboard-card p-4 mt-4">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
-                    <div class="input-group" style="max-width: 400px;">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="bi bi-search text-muted"></i>
-                        </span>
-                        <input type="text" 
-                            id="inventorySearch" 
-                            class="form-control border-start-0 ps-0" 
-                            placeholder="Search...">
+                                <div class="mt-5">
+                                    <h3 class="account-section-title">
+                                        <i class="bi bi-person-lines-fill"></i>
+                                        Personal Information
+                                    </h3>
+                                    <div class="account-info-grid">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">First Name</label>
+                                            <input type="text" class="form-control form-control-custom" value="<?php echo htmlspecialchars($_SESSION['first_name'] ?? ''); ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Last Name</label>
+                                            <input type="text" class="form-control form-control-custom" value="<?php echo htmlspecialchars($_SESSION['last_name'] ?? ''); ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Email Address</label>
+                                            <input type="email" class="form-control form-control-custom" value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Phone Number</label>
+                                            <input type="tel" class="form-control form-control-custom" value="<?php echo htmlspecialchars($_SESSION['phone_number'] ?? ''); ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <button class="btn btn-primary btn-sm px-4" data-bs-toggle="modal" data-bs-target="#addOrderModal">
-                        <i class="bi bi-plus-lg me-1"></i> Add Order
-                    </button>
-                </div>
-                
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Date</th>
-                                <th>Total Amount</th>
-                                <th>Order Status</th>
-                                <th>Payment Status</th>
-                                <th>Payment Type</th>
-                                <th class="text-end">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="orderTableBody">
-                            <?php if (empty($orders)): ?>
-                                <tr>
-                                    <td colspan="8" class="text-center py-4 text-muted">No orders found</td>
-                                </tr>
-                            <?php else: ?>
-                                <?php foreach ($orders as $order):
-                                    $status = htmlspecialchars($order['order_status']);
-                                    $badgeClass = match($status) {
-                                        'Pending'    => 'bg-warning-subtle text-warning',
-                                        'Processing' => 'bg-info-subtle text-info',
-                                        'Ready'      => 'bg-primary-subtle text-primary',
-                                        'Completed'  => 'bg-success-subtle text-success',
-                                        'Cancelled'  => 'bg-danger-subtle text-danger',
-                                        default      => 'bg-secondary-subtle text-secondary',
-                                    };
-                                    $payStatus = htmlspecialchars($order['payment_status'] ?? '—');
-                                    $payStatusClass = match($payStatus) {
-                                        'Paid'     => 'bg-success-subtle text-success',
-                                        'Pending'  => 'bg-warning-subtle text-warning',
-                                        'Refunded' => 'bg-secondary-subtle text-secondary',
-                                        default    => 'bg-secondary-subtle text-secondary',
-                                    };
-                                    $payType = htmlspecialchars($order['payment_type'] ?? '—');
-                                    $customer = !empty($order['customer_name']) ? htmlspecialchars($order['customer_name']) : '—';
-                                    $dateFormatted = date('Y-m-d', strtotime($order['created_at'])) . ' | ' . date('h:i A', strtotime($order['created_at']));
-                                ?>
-                                <tr class="order-row">
-                                    <td>#<?php echo htmlspecialchars($order['order_id']); ?></td>
-                                    <td><?php echo $customer; ?></td>
-                                    <td><?php echo htmlspecialchars($dateFormatted); ?></td>
-                                    <td>₱<?php echo number_format((float)$order['total_amount'], 2); ?></td>
-                                    <td><span class="badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span></td>
-                                    <td><span class="badge <?php echo $payStatusClass; ?>"><?php echo $payStatus; ?></span></td>
-                                    <td><?php echo $payType; ?></td>
-                                    <td class="text-end">
-                                        <button class="btn btn-light btn-sm" title="Edit"><i class="bi bi-pencil"></i></button>
-                                        <button class="btn btn-light btn-sm text-danger" title="Delete"><i class="bi bi-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
+                    <div class="col-lg-4">
+                        <div class="security-card">
+                            <h3 class="account-section-title">
+                                <i class="bi bi-shield-lock-fill"></i>
+                                Account Security
+                            </h3>
+                            <p class="text-muted small mb-4">Update your password to keep your account secure.</p>
+                            
+                            <div class="form-group mb-3">
+                                <label class="form-label-custom">Current Password</label>
+                                <input type="password" class="form-control form-control-custom" placeholder="••••••••">
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label class="form-label-custom">New Password</label>
+                                <input type="password" class="form-control form-control-custom" placeholder="Min. 8 characters">
+                                <div class="password-requirement">
+                                    <i class="bi bi-circle-fill"></i> At least 8 characters long
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mb-4">
+                                <label class="form-label-custom">Confirm New Password</label>
+                                <input type="password" class="form-control form-control-custom" placeholder="••••••••">
+                            </div>
+                            
+                            <button class="btn btn-outline-dark w-100 btn-update">
+                                Update Password
+                            </button>
+                        </div>
+
+                        <div class="dashboard-card p-4 mt-4 bg-light border-0">
+                            <h4 class="h6 fw-bold mb-3">Account Activity</h4>
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="p-2 rounded-circle bg-white text-success">
+                                    <i class="bi bi-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="small fw-bold">Last login</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Today, 10:45 AM from Manila, PH</div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="p-2 rounded-circle bg-white text-primary">
+                                    <i class="bi bi-shield-check fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="small fw-bold">2FA Status</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Enabled via Authenticator App</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -256,6 +270,6 @@ $orders = $orderController->index();
     <script src="../src/assets/javascript/admin/left-side-bar.js?v=5"></script>
     <script src="../src/assets/javascript/admin/top-navbar.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-8DBwxvghb+f8w824cDtgFXtW+eLk+ifaFVIJ9ai0SyxgbpPzJblwXERQ8GHKq2ya" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script></body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

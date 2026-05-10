@@ -1,127 +1,339 @@
 .sidebar {
-    flex: 0 0 260px;
-    max-width: 260px;
-    min-width: 260px;
-    min-height: 100vh;
-    padding: 1.5rem;
-    border-right: 1px solid #e9ecef;
-    transition: flex 0.2s ease, max-width 0.2s ease, min-width 0.2s ease, opacity 0.2s ease;
-    overflow: hidden;
+  position: relative;
+  flex: 0 0 260px;
+  max-width: 260px;
+  min-width: 260px;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: #3D2B1F;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  transition:
+    flex 0.2s ease,
+    max-width 0.2s ease,
+    min-width 0.2s ease,
+    opacity 0.2s ease;
+  overflow: hidden;
 }
 
-.dashboard-app.sidebar-collapsed .sidebar {
-    flex: 0 0 80px;
-    max-width: 80px;
-    min-width: 80px;
+.sidebar-collapsed .sidebar {
+  flex: 0 0 80px;
+  max-width: 80px;
+  min-width: 80px;
+  opacity: 1;
+  padding: 1.5rem 0.75rem;
+  overflow: visible;
+  z-index: 1000;
+}
+
+.sidebar-collapsed .sidebar .sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-collapsed .sidebar .sidebar-brand .h4,
+.sidebar-collapsed .sidebar .sidebar-brand small {
+  display: none;
+}
+
+.sidebar-collapsed .sidebar .sidebar-brand::before {
+  display: none;
+}
+
+.sidebar-collapsed .sidebar .sidebar-brand {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar-collapsed .sidebar .sidebar-brand i {
+  margin: 0 !important;
+  font-size: 1.5rem !important;
+}
+
+.sidebar-collapsed .sidebar .menu-card {
+  background: transparent;
+}
+
+.sidebar-collapsed .sidebar .sidebar-nav {
+  gap: 0.75rem;
+}
+
+.sidebar-collapsed .sidebar .sidebar-nav .list-group-item {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.85rem;
+  font-size: 0;
+  gap: 0;
+}
+
+.nav-label {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sidebar-collapsed .sidebar .nav-label {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+  margin-left: 0;
+  background: #3D2B1F;
+  color: #FFFFFF;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1050;
+  box-shadow: 10px 0 15px -5px rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.sidebar-collapsed .sidebar .list-group-item:hover .nav-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Hide the basic tooltip for Products since we show the submenu instead */
+.sidebar-collapsed .sidebar #products-toggle:hover .nav-label {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.sidebar-collapsed
+  .sidebar
+  .sidebar-nav
+  .list-group-item
+  .d-flex {
+  justify-content: center !important;
+  align-items: center !important;
+  flex-direction: column !important;
+}
+
+.sidebar-collapsed
+  .sidebar
+  .sidebar-nav
+  .list-group-item
+  span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar-collapsed
+  .sidebar
+  .sidebar-nav
+  .list-group-item
+  .nav-icon {
+  font-size: 1.2rem;
+  margin: 0 !important;
+}
+
+.sidebar-collapsed
+  .sidebar
+  .sidebar-nav
+  .list-group-item
+  .bi-chevron-right,
+.sidebar-collapsed
+  .sidebar
+  .sidebar-nav
+  .list-group-item
+  .bi-chevron-down {
+  display: none;
+}
+
+.sidebar-collapsed .sidebar .sidebar-nav .collapse {
+  display: block !important;
+  height: auto !important;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Side popup for submenu in collapsed mode */
+.sidebar-collapsed .sidebar #productsSubmenu {
+  display: block !important;
+  position: absolute;
+  left: 80px; /* Width of collapsed sidebar */
+  top: 0;
+  background: #3D2B1F;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: none;
+  border-radius: 0 0.85rem 0.85rem 0;
+  box-shadow: 15px 10px 30px rgba(0, 0, 0, 0.2);
+  min-width: 220px;
+  z-index: 2000;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateX(-10px);
+}
+
+.sidebar-collapsed .sidebar #products-toggle:hover ~ #productsSubmenu,
+.sidebar-collapsed .sidebar #productsSubmenu:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateX(0) !important;
+  transition-delay: 0s;
+}
+
+.sidebar-collapsed .sidebar #productsSubmenu {
+  transition-delay: 0.1s;
+}
+
+/* Invisible bridge to maintain hover */
+.sidebar-collapsed .sidebar #productsSubmenu::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -20px;
+  width: 20px;
+}
+
+.sidebar-collapsed .sidebar #productsSubmenu .list-group {
+  padding: 0.5rem !important;
+  gap: 0.25rem !important;
+  background: transparent !important;
+}
+
+.sidebar-collapsed .sidebar #productsSubmenu .list-group-item {
+  font-size: 0.9rem !important;
+  padding: 0.85rem 1.25rem !important;
+  border: none !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 0.65rem !important;
+  margin-bottom: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.sidebar-collapsed .sidebar #productsSubmenu .list-group-item i {
+  font-size: 1.1rem !important;
+  color: #6c757d !important;
+  transition: color 0.2s ease !important;
+}
+
+.sidebar-collapsed .sidebar #productsSubmenu .list-group-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #FFFFFF !important;
+}
+
+.sidebar-collapsed .sidebar #productsSubmenu .list-group-item:hover i {
+  color: #FFFFFF !important;
+}
+
+.sidebar-collapsed .sidebar #productsSubmenu .list-group-item.active {
+  background: #D35400 !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+}
+
+.sidebar-collapsed .sidebar #productsSubmenu .list-group-item.active i {
+  color: #FFFFFF !important;
+}
+
+/* Header inside the submenu - matched to Prosperna style */
+.sidebar-collapsed .sidebar #productsSubmenu .submenu-header {
+  display: block;
+  padding: 1.25rem 1.25rem 0.75rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0 0.85rem 0 0;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+  to {
     opacity: 1;
-    padding: 1.5rem 0.75rem;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-brand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-brand .h4,
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-brand small {
-    display: none;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-brand::before {
-    content: 'DS';
-    display: inline-flex;
-    width: 42px;
-    height: 42px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #eef3ff;
-    color: #0d6efd;
-    font-weight: 700;
-    font-size: 0.95rem;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .menu-card {
-    background: transparent;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav {
-    gap: 0.75rem;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .list-group-item {
-    justify-content: center;
-    padding: 0.85rem;
-    font-size: 0;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .list-group-item .nav-icon {
-    font-size: 1.2rem;
-    margin: 0;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .list-group-item .bi-chevron-right,
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .list-group-item .bi-chevron-down {
-    display: none;
-}
-
-.dashboard-app.sidebar-collapsed .sidebar .sidebar-nav .collapse {
-    display: none !important;
+    transform: translateX(0);
+  }
 }
 
 .sidebar-brand .h4 {
-    font-size: 1.2rem;
-    font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.sidebar-brand small {
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .menu-card {
-    border: none;
-    box-shadow: none;
-    background: transparent;
-    padding: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
 }
 
 .sidebar-nav .list-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
 }
 
 .sidebar-nav .list-group-item {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    padding: 0.85rem 1rem;
-    color: #495057;
-    background: #fff;
-    border: 1px solid transparent;
-    border-radius: 0.85rem;
-    text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.85rem;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .sidebar-nav .list-group-item .nav-icon {
-    font-size: 1rem;
-    line-height: 1;
+  font-size: 1rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .sidebar-nav .list-group-item:hover {
-    background: #f8f9fa;
-    color: #212529;
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
 }
 
 .sidebar-nav .list-group-item.active {
-    background: #eef3ff;
-    color: #0d6efd;
-    border-color: transparent;
-    font-weight: 600;
+  background: #D35400;
+  color: #FFFFFF;
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(211, 84, 0, 0.3);
+}
+
+.sidebar-nav .list-group-item.active .nav-icon {
+  color: #FFFFFF;
 }
 
 .sidebar-nav .list-group-item.active:hover {
-    background: #dde5ff;
+  background: #E67E22;
 }
-
-

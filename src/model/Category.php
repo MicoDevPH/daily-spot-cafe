@@ -1,5 +1,5 @@
 <?php
-require_once '../src/config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class Category
 {
@@ -10,6 +10,8 @@ class Category
     public $category_name;
     public $description;
     public $is_active;
+    public $has_variants;  // 1 = has Iced/Hot variant
+    public $has_sizes;     // 1 = has Grande/Venti sizes
     public $created_at;
 
     public function __construct()
@@ -19,14 +21,16 @@ class Category
 
     public function create()
     {
-        $query = "INSERT INTO " . $this->table_name . " SET category_name=?, description=?, is_active=?";
+        $query = "INSERT INTO " . $this->table_name . " SET category_name=?, description=?, is_active=?, has_variants=?, has_sizes=?";
         $stmt = $this->conn->prepare($query);
 
-        $this->category_name = htmlspecialchars(strip_tags($this->category_name));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->is_active = htmlspecialchars(strip_tags($this->is_active));
+        $this->category_name  = htmlspecialchars(strip_tags($this->category_name));
+        $this->description    = htmlspecialchars(strip_tags($this->description));
+        $this->is_active      = (int) $this->is_active;
+        $this->has_variants   = (int) ($this->has_variants ?? 0);
+        $this->has_sizes      = (int) ($this->has_sizes ?? 0);
 
-        $stmt->bind_param("ssi", $this->category_name, $this->description, $this->is_active);
+        $stmt->bind_param("ssiii", $this->category_name, $this->description, $this->is_active, $this->has_variants, $this->has_sizes);
 
         if ($stmt->execute()) {
             $this->category_id = $this->conn->insert_id;
@@ -53,22 +57,26 @@ class Category
 
         if ($row) {
             $this->category_name = $row['category_name'];
-            $this->description = $row['description'];
-            $this->is_active = $row['is_active'];
-            $this->created_at = $row['created_at'];
+            $this->description   = $row['description'];
+            $this->is_active     = $row['is_active'];
+            $this->has_variants  = (int) ($row['has_variants'] ?? 0);
+            $this->has_sizes     = (int) ($row['has_sizes'] ?? 0);
+            $this->created_at    = $row['created_at'];
         }
     }
 
     public function update()
     {
-        $query = "UPDATE " . $this->table_name . " SET category_name=?, description=?, is_active=? WHERE category_id=?";
+        $query = "UPDATE " . $this->table_name . " SET category_name=?, description=?, is_active=?, has_variants=?, has_sizes=? WHERE category_id=?";
         $stmt = $this->conn->prepare($query);
 
         $this->category_name = htmlspecialchars(strip_tags($this->category_name));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->is_active = htmlspecialchars(strip_tags($this->is_active));
+        $this->description   = htmlspecialchars(strip_tags($this->description));
+        $this->is_active     = (int) $this->is_active;
+        $this->has_variants  = (int) ($this->has_variants ?? 0);
+        $this->has_sizes     = (int) ($this->has_sizes ?? 0);
 
-        $stmt->bind_param("ssii", $this->category_name, $this->description, $this->is_active, $this->category_id);
+        $stmt->bind_param("ssiiii", $this->category_name, $this->description, $this->is_active, $this->has_variants, $this->has_sizes, $this->category_id);
 
         return $stmt->execute();
     }

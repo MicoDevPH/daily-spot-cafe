@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class User
 {
@@ -83,20 +83,23 @@ class User
 
     public function authenticate($username, $password)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE username = ? AND password = ?";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE username = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ss", $username, $password);
+        $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $this->user_id = $row['user_id'];
-            $this->username = $row['username'];
-            $this->password = $row['password'];
-            $this->role_id = $row['role_id'];
-            $this->created_at = $row['created_at'];
-            return true;
+            // Check if password matches (handling both plain text for legacy and hashed for new)
+            if (password_verify($password, $row['password']) || $password === $row['password']) {
+                $this->user_id = $row['user_id'];
+                $this->username = $row['username'];
+                $this->password = $row['password'];
+                $this->role_id = $row['role_id'];
+                $this->created_at = $row['created_at'];
+                return true;
+            }
         }
         return false;
     }
