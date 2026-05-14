@@ -192,12 +192,7 @@ $categories = $categoryController->index();
                                     <tr class="category-row">
                                         <td><?php echo htmlspecialchars($category['category_id']); ?></td>
                                         <td>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="p-2 rounded-2" style="background: rgba(211,84,0,0.1);">
-                                                    <i class="bi bi-tag-fill" style="color: #D35400;"></i>
-                                                </div>
-                                                <span class="fw-semibold"><?php echo htmlspecialchars($category['category_name']); ?></span>
-                                            </div>
+                                            <span class="fw-semibold"><?php echo htmlspecialchars($category['category_name']); ?></span>
                                         </td>
                                         <td class="text-muted"><?php echo !empty($category['description']) ? htmlspecialchars($category['description']) : '—'; ?></td>
                                         <td>

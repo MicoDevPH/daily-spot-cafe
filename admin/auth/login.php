@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="bi bi-cup-hot-fill"></i>
                 </div>
                 <h1 class="brand-name">Daily Spot Cafe</h1>
-                <p class="brand-tagline">Administration Dashboard</p>
+                <p class="brand-tagline">Administration Page</p>
             </div>
 
             <?php if ($error): ?>

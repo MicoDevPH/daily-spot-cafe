@@ -175,7 +175,15 @@ $users = $userController->index();
                                     </tr>
                                 <?php else: ?>
                                     <?php foreach ($users as $user): 
-                                        $fullName = !empty($user['details']['full_name']) ? $user['details']['full_name'] : $user['username'];
+                                        // Ensure full_name is properly set, fallback to username if not available
+                                        $fullName = '';
+                                        if (isset($user['details']['first_name']) && isset($user['details']['last_name'])) {
+                                            $fullName = trim($user['details']['first_name'] . ' ' . $user['details']['last_name']);
+                                        }
+                                        if (empty($fullName) && !empty($user['username'])) {
+                                            $fullName = $user['username'];
+                                        }
+
                                         $email = !empty($user['details']['email']) ? $user['details']['email'] : 'No email';
                                         $phone = !empty($user['details']['phone_number']) ? $user['details']['phone_number'] : 'N/A';
                                         
@@ -191,14 +199,16 @@ $users = $userController->index();
                                     <tr>
                                         <td><?php echo htmlspecialchars($user['user_id']); ?></td>
                                         <td>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-weight: bold;">
-                                                    <?php echo htmlspecialchars($initials); ?>
-                                                </div>
-                                                <div>
-                                                    <div class="fw-bold"><?php echo htmlspecialchars($fullName); ?></div>
-                                                </div>
-                                            </div>
+                                            <a href="#" class="fw-semibold text-decoration-none text-dark user-details-link"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#userDetailsModal"
+                                               data-user-id="<?php echo htmlspecialchars($user['user_id']); ?>"
+                                               data-full-name="<?php echo htmlspecialchars($fullName); ?>"
+                                               data-email="<?php echo htmlspecialchars($email); ?>"
+                                               data-phone="<?php echo htmlspecialchars($phone); ?>"
+                                               data-role="<?php echo htmlspecialchars($roleText); ?>">
+                                                <?php echo htmlspecialchars($fullName); ?>
+                                            </a>
                                         </td>
                                         <td><?php echo htmlspecialchars($email); ?></td>
                                         <td><?php echo htmlspecialchars($phone); ?></td>
@@ -218,9 +228,61 @@ $users = $userController->index();
         </div>
     </div>
 
+    <!-- User Details Modal -->
+    <div class="modal fade" id="userDetailsModal" tabindex="-1" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="userDetailsModalLabel">User Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Full Name:</label>
+                        <p id="modalFullName" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Email:</label>
+                        <p id="modalEmail" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Phone Number:</label>
+                        <p id="modalPhone" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Role:</label>
+                        <p id="modalRole" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label small fw-bold">User ID:</label>
+                        <p id="modalUserId" class="form-control-plaintext"></p>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../src/assets/javascript/admin/left-side-bar.js?v=5"></script>
     <script src="../src/assets/javascript/admin/top-navbar.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userDetailsModal = document.getElementById('userDetailsModal');
+            userDetailsModal.addEventListener('show.bs.modal', function (event) {
+                // Button that triggered the modal
+                const button = event.relatedTarget;
+                // Extract info from data-bs-* attributes and update the modal's content.
+                document.getElementById('modalFullName').textContent = button.getAttribute('data-full-name');
+                document.getElementById('modalEmail').textContent = button.getAttribute('data-email');
+                document.getElementById('modalPhone').textContent = button.getAttribute('data-phone');
+                document.getElementById('modalRole').textContent = button.getAttribute('data-role');
+                document.getElementById('modalUserId').textContent = button.getAttribute('data-user-id');
+            });
+        });
+    </script>
 </body>
 </html>

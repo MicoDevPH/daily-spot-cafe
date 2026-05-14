@@ -209,7 +209,9 @@ $categories = $categoryController->index();
                             <!-- Example Row 1 -->
                             <tr>
                                 <td>1</td>
-                                <td>Java Chip Frappuccino</td>
+                                <td>
+                                    <span class="fw-semibold">Caramel Macchiato</span>
+                                </td>
                                 <td>Frappe</td>
                                 <td>$4.50</td>
                                 <td><span class="badge bg-success-subtle text-success">Published</span></td>
